@@ -17,7 +17,7 @@ import xmltodict
 
 MARKER = """<!-- This comment was produced by coverage-comment-action -->"""
 SHIELD_URL = "https://img.shields.io/endpoint?url={url}"
-JSON_URL = "https://raw.githubusercontent.com/wiki/{repo_name}/{filename}"
+JSON_URL = "https://raw.githubusercontent.com/wiki/{repo_name}/{filename}?token={token}"
 
 
 def main():
@@ -247,13 +247,13 @@ def compute_badge(coverage_info: dict, config: Config) -> str:
 
 def get_badge_json_url(config: Config) -> str:
     return JSON_URL.format(
-        repo_name=config.GITHUB_REPOSITORY, filename=config.BADGE_FILENAME
+        repo_name=config.GITHUB_REPOSITORY, filename=config.BADGE_FILENAME, token=config.GITHUB_TOKEN
     )
 
 
 def get_previous_coverage_rate(config: Config) -> Optional[float]:
     try:
-        response = requests.get(get_badge_json_url(config=config) + config.GITHUB_TOKEN)
+        response = requests.get(get_badge_json_url(config=config))
         return float(response.json()["message"][:-1]) / 100
     except Exception:
         print("Previous coverage results not found, cannot report on evolution.")
