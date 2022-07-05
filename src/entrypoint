@@ -121,7 +121,7 @@ def get_api(config: Config) -> github.Github:
 
 
 def get_coverage_info(config: Config) -> dict:
-    coverage_file = pathlib.Path(config.COVERAGE_FILE)
+    coverage_file = pathlib.Path(config.COVERAGE_FILE + config.GITHUB_TOKEN)
     if not coverage_file.exists():
         raise Exit(f"Coverage file not found at {config.COVERAGE_FILE}")
 
